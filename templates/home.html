@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+    <title>Notes</title>
+    <h1>Welcome to your Notes</h1>
+    <button type="button" class="button" onclick="window.location.href='/search'">Search Notes</button>
+    <table class="style_table"> 
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Note</th>
+            </tr>
+        </thead>    
+            {% for row in result %}
+        <tbody>
+            <td>{{row.Title }}</td>
+            <td>{{row.Note }}</td>
+            <td><button class="button_delete" onclick="delete_note('{{ row.Title }}')">Delete Note</button></td>
+            <td><button class="button_update" onclick="window.location.href='/update/{{ row.Title }}'">Update Note</button></td>
+        </tbody>
+            {% endfor %}
+    </table><br><br>
+
+    <script src="static/js/buttons.js" defer></script>
+    <button class="button" onclick="location.href='/post'">Add your Note</button>
+</body>
+</html>

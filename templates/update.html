@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <form id="form_update">    
+        {% for val in values%}
+        <label for="Title">Title: {{val.Title}}</label>
+        <input type="hidden" id="Title" name="Title" value="{{val.Title}}">
+        <br><br>
+        <label for="Note">Note</label>
+        <input type="text" id="Note" name="Note" value="{{val.Note}}">
+        {% endfor %}
+        <button type="button" class="button" onclick="update_note()">Update Customer</button>
+    </form>
+
+    <script src="/static/js/buttons.js"></script>
+</body>
+</html>
