@@ -20,15 +20,15 @@
         </thead>    
             {% for row in result %}
         <tbody>
-            <td>{{row.Title }}</td>
-            <td>{{row.Note }}</td>
-            <td><button class="button_delete" onclick="delete_note('{{ row.Title }}')">Delete Note</button></td>
-            <td><button class="button_update" onclick="window.location.href='/update/{{ row.Title }}'">Update Note</button></td>
+            <td>{{row.title }}</td>
+            <td>{{row.note}}</td>
+            <td><button class="button_delete" onclick="delete_note('{{ row.title }}')">Delete Note</button></td>
+            <td><button class="button_update" onclick="window.location.href='/update/{{ row.title }}'">Update Note</button></td>
         </tbody>
             {% endfor %}
     </table><br><br>
 
-    <script src="static/js/buttons.js" defer></script>
+    <script src="/static/js/buttons.js" defer></script>
     <button class="button" onclick="location.href='/post'">Add your Note</button>
 </body>
 </html>

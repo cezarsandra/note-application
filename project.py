@@ -7,7 +7,10 @@ from flask import Flask, render_template, request, send_from_directory, jsonify
 
 
 app = Flask (__name__)
-
+print("User:", os.getenv("my_user"))
+print("Password:", os.getenv("my_password"))
+print("Database:", os.getenv("my_db"))
+print("Port:", os.getenv("my_port"))
 try:
 
     load_dotenv()
@@ -15,12 +18,11 @@ try:
         host="localhost",
         user=os.getenv("my_user"),
         password=os.getenv("my_password"),
-        database=os.getenv("my_database")
+        database=os.getenv("my_db")
     )
     print("Connected to database successfully")
 except mysql.connector.Error as err:
     print("Cannot connect to database")
-
 
 class Notes():
     """Class representing the Notes values"""
@@ -51,8 +53,8 @@ def get():
     result_query = cursor.fetchall()
     values = []
     for row in result_query:
-        user_object = Notes(row[0], row[1],)
-        values.append(user_object)
+        notes_object = Notes(row[0], row[1],)
+        values.append(notes_object)
 
     return render_template("home.html", result = values)
 
@@ -63,13 +65,13 @@ def post_note():
         return render_template("post_note.html")
     elif request.method == "POST":
         post_object = Notes(
-            Title = request.form.get("Title"),
-            Note = request.form.get("Note")
+            title = request.form.get("Title"),
+            note = request.form.get("Note")
         )
         query = """INSERT INTO notes (Title, Note) VALUES (%s, %s)"""
         connection.connect()
         cursor = connection.cursor()
-        cursor.execute(query, (post_object.Title, post_object.Note))
+        cursor.execute(query, (post_object.title, post_object.note))
 
         connection.commit()
         connection.close()
@@ -98,11 +100,12 @@ def update_note(titleNote):
         if not data:
             return jsonify({"error": "Invalid JSON data"}), 400
         send_object = Notes(titleNote, data.get("note"))
+        print(send_object.note)
 
         connection.connect()
         cursor = connection.cursor()
         cursor.execute("""UPDATE notes SET Note = %s WHERE Title = %s""",
-                        (send_object.Note, titleNote))
+                        (send_object.note, titleNote))
         connection.commit()
         cursor.close()
         connection.close()

@@ -23,12 +23,15 @@ function delete_note(titleNote){
 
 
 function update_note(){
-    const title = document.querySelector("input[name='Title']").value;
-    const note = document.querySelector("input[name='Note']").value;
+    console.log("update_note function called"); 
+    const title = document.getElementById("title").value;
+    const note = document.getElementById("note").value;
 
     const updateNote={note};
 
     console.log(updateNote);
+    console.log( title);
+
 
     fetch(`/update/${title}`, {
         method: "PUT",
