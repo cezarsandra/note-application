@@ -7,24 +7,27 @@ from flask import Flask, render_template, request, send_from_directory, jsonify
 
 
 app = Flask (__name__)
-print("User:", os.getenv("my_user"))
-print("Password:", os.getenv("my_password"))
-print("Database:", os.getenv("my_db"))
-print("Port:", os.getenv("my_port"))
-try:
 
-    load_dotenv()
-    connection = mysql.connector.connect(
-        host="localhost",
-        user=os.getenv("my_user"),
-        password=os.getenv("my_password"),
-        database=os.getenv("my_db")
-    )
-    print("Connected to database successfully")
-except mysql.connector.Error as err:
-    print("Cannot connect to database")
+class Cofigs():
+    """Cofigs representing the app configs"""
+    def __init__(self, file_path):
+        if not load_dotenv(file_path):
+            print("cannot read .env file")
+            exit(1)
+        
+        self.db_user = os.getenv("my_user") if os.getenv("my_user") else "root"
+        self.db_password = os.getenv("my_password") if os.getenv("my_password") else "abc"
+        self.db_name = os.getenv("my_db") if os.getenv("my_db") else "db"
+        self.port = os.getenv("my_port") if os.getenv("my_port") else 2000
+        self.db_host = os.getenv(my_host) if os.getenv(my_host) else "localhost"
 
-class Notes():
+        print("These are my configs:")
+        print("User:", self.db_user)
+        print("Password:", self.db_password)
+        print("Database:", self.db_name)
+        print("Port:", self.port)
+
+class Note():
     """Class representing the Notes values"""
     def __init__(self, title, note):
         self.title = title
@@ -41,8 +44,6 @@ def send_css(filename):
 def send_js(filename):
 
     return send_from_directory("static/js/", filename)
-
-
 
 @app.route("/")
 def get():
@@ -152,5 +153,24 @@ def search_notes():
         return "We can t find your Note"
 
 
+def DB_connection(cfg):
+    try:    
+        connection = mysql.connector.connect(
+            host=cfg.db_host,
+            user=cfg.db_user,
+            password=cfg.db_password,
+            database=cfg.db_name
+        )
+        print("Connected to database successfully")
+    except mysql.connector.Error as err:
+        print("Cannot connect to database")
+
+def main():
+    cfg = Configs("./.env")
+    conn = DB_connection(cfg)
+
+    app.run(port = cfg.port)
+
 if __name__ == "__main__":
-    app.run(port = os.getenv("my_port"))
+    main()
+
